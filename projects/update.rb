@@ -16,16 +16,7 @@ USERNAME = 'subtlegradient'
 TOKEN = ''
 BASEURL = "http://test.mootools.net/"
 
-def doit!(projectpath)
-  `git submodule init 2>&1; git submodule update 2>&1`
-  
-  url = get_url(projectpath)
-  
-  res = Net::HTTP.get_response( URI.parse(url) )
-  print res.body
-  
-  
-end
+
 
 def get_url(projectpath)
   # return "http://"
@@ -125,12 +116,26 @@ def get_url(projectpath)
     end
   end
   
-  p url
+  # p url
   # p [url,parts]
     # http://home.subtlegradient.com:4008/?
   # [url,{}]
   url
 end
+
+
+
+def doit!(projectpath)
+  `git submodule init 2>&1; git submodule update 2>&1`
+  
+  url = get_url(projectpath)
+  
+  res = Net::HTTP.get_response( URI.parse(url) )
+  # print res.body
+  
+  
+end
+
 
 
 Dir["#{ENV['HOME']}/httpdocs/projects/*"].each do |projectpath|
