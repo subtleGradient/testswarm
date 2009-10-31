@@ -144,7 +144,7 @@ Dir["#{ENV['HOME']}/httpdocs/projects/*"].each do |projectpath|
   cmd = "cd #{projectpath}; git pull 2>&1"
   result = `#{cmd}`
   
-  # doit!(projectpath) unless result =~ /Already up-to-date/
-  doit!(projectpath)
+  doit!(projectpath) unless result =~ /Already up-to-date/
+  # doit!(projectpath)
   
 end
