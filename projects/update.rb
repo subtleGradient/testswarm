@@ -12,8 +12,8 @@ require "uri"
 require "cgi"
 
 
-USERNAME = 'subtlegradient'
 TOKEN = ''
+USERNAME = 'mootools'
 BASEURL = "http://test.mootools.net/"
 
 
@@ -26,11 +26,12 @@ def get_url(projectpath)
   first = true
   
   parts = [
+    {'allowpostwithget' => 1},
     {'state'    => 'addjob'},
     {'user'     => USERNAME},
     {'auth'     => TOKEN},
-    {'max'      => 1},
-    {'browsers' => 'all'},
+    {'max'      => 2},
+    {'browsers' => 'popularbeta'},
   ]
   # parts = {
   #   'state'    => 'addjob',
@@ -84,24 +85,27 @@ def get_url(projectpath)
     # parts['urls'] <<  "http://test.mootools.net/projects/slick/test/specrunner_SlickFeatures.html?script=http://test.mootools.net/js/inject.js"    
     
     parts << ({ 'job_name' => 'Slick Edge'})
-    parts << ({ 'suites[]' => "Browser Specs (test bug verifying)" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_browser.html?script=http://test.mootools.net/js/inject.js"           })
-    parts << ({ 'suites[]' => "Slick: Parser Specs" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_SlickParser.html?script=http://test.mootools.net/js/inject.js"       })
-    parts << ({ 'suites[]' => "Slick: Multiple Document Specs" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_SlickDocs.html?script=http://test.mootools.net/js/inject.js"         })
-    parts << ({ 'suites[]' => "Slick: Selector Specs (all doctypes)" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_SlickSelect.html?script=http://test.mootools.net/js/inject.js"       })
-    parts << ({ 'suites[]' => "Slick: Selector Mocks (all doctypes)" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_SlickSelectMocks.html?script=http://test.mootools.net/js/inject.js"  })
-    parts << ({ 'suites[]' => "Slick: Selector Specs Exhaustive (all doctypes)" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_SlickExhaustive.html?script=http://test.mootools.net/js/inject.js"   })
-    parts << ({ 'suites[]' => "Slick: Selector Specs (XML only)" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_SlickXML.html?script=http://test.mootools.net/js/inject.js"          })
-    parts << ({ 'suites[]' => "Slick: Match Specs" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_SlickMatch.html?script=http://test.mootools.net/js/inject.js"        })
-    parts << ({ 'suites[]' => "Slick: Slick Features" })
-    parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_SlickFeatures.html?script=http://test.mootools.net/js/inject.js"     })
+    
+    # parts << ({ 'suites[]' => "Browser Specs (test bug verifying)" })
+    # parts << ({ 'urls[]'   => "http://test.mootools.net/projects/slick/test/specrunner_browser.html?script=http://test.mootools.net/js/inject.js"           })
+    
+    addresses = <<-HTML.gsub(/^\s*|\s*$/,'').split(/\s*\n\s*/).map { |address| address.split(' - ') }
+      specrunner_SlickDocs.html - Multiple Document Specs
+      specrunner_SlickSelect.html - Selector Specs (all doctypes)
+      specrunner_SlickXML.html - Selector Specs (XML only)
+      specrunner_SlickSelectMocks.html - Selector Mocks (all doctypes)
+      specrunner_SlickSelectMockGoogle.html - Selector Mocks Google Closure
+      specrunner_SlickExhaustive.html - Selector Specs Exhaustive (all doctypes)
+      specrunner_SlickMatch.html - Match Specs
+      specrunner_SlickFeatures.html - Slick Features
+      specrunner_SlickParser.html - Slick Parser Specs
+    HTML
+    
+    addresses.each do |address|
+      parts << ({ 'suites[]' => address.last })
+      parts << ({ 'urls[]' => "http://test.mootools.net/projects/slick/test/#{address.first}?script=http://test.mootools.net/js/inject.js" })
+    end
+    
   end
   
   parts.each do |pair|
